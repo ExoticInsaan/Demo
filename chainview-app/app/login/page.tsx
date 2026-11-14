@@ -1,9 +1,9 @@
 "use client";
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import { signIn } from "next-auth/react";
 import { useSearchParams } from "next/navigation";
 
-export default function Login() {
+function LoginForm() {
   const ref = useSearchParams().get("ref") ?? "";
   const [mode, setMode] = useState<"up" | "in">(ref ? "up" : "in");
   const [email, setEmail] = useState(""); const [password, setPassword] = useState(""); const [err, setErr] = useState("");
@@ -31,4 +31,8 @@ export default function Login() {
       <p><a href="#" onClick={e => { e.preventDefault(); setMode(mode === "up" ? "in" : "up"); }}>{mode === "up" ? "Already have an account? Log in" : "New here? Sign up"}</a></p>
     </main>
   );
+}
+
+export default function Login() {
+  return <Suspense fallback={null}><LoginForm /></Suspense>;
 }
