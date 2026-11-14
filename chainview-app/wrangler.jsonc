@@ -5,11 +5,12 @@
   "compatibility_date": "2026-11-01",
   "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
   "assets": { "directory": ".open-next/assets", "binding": "ASSETS" },
+  "vars": { "NEXTAUTH_URL": "https://chainview.jatinsinsinwar18.workers.dev" },
   "observability": { "enabled": true },
   "hyperdrive": [
     {
       "binding": "HYPERDRIVE",
-      "id": "REPLACE_WITH_HYPERDRIVE_ID",
+      "id": "85fef352ab5a484e97d95222d6f40c59",
       "localConnectionString": "postgresql://user:password@localhost:5432/chainview"
     }
   ]
