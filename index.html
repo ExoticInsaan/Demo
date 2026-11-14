@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ChainView – Tron wallet tracker (sample)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700;800&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#edf1f4;--surface:#fff;--ink:#12202e;--muted:#52636f;--line:#c9d3db;--teal:#0f5c63;--teal-soft:#d7ebec;--amber:#e8a33d;--on-teal:#fff;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1a24;--surface:#16252f;--ink:#e8eef2;--muted:#9bb0bd;--line:#2b3e4a;--teal:#5cc4cc;--teal-soft:#183840;--amber:#f0b45a;--on-teal:#0f1a24}}
+:root[data-theme="dark"]{--bg:#0f1a24;--surface:#16252f;--ink:#e8eef2;--muted:#9bb0bd;--line:#2b3e4a;--teal:#5cc4cc;--teal-soft:#183840;--amber:#f0b45a;--on-teal:#0f1a24}
+html{scroll-padding-top:env(safe-area-inset-top,0px);height:100%}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.6 "IBM Plex Sans",system-ui,sans-serif}
+h1,h2,h3{font-family:"Bricolage Grotesque","IBM Plex Sans",sans-serif;line-height:1.08;margin:0}
+a{color:inherit}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+nav{display:flex;justify-content:space-between;align-items:center;padding:18px 0}
+.logo{font:800 22px "Bricolage Grotesque",sans-serif;text-decoration:none}
+.logo b{color:var(--teal)}
+nav a.btn{font-size:14px}
+.btn{display:inline-block;background:var(--teal);color:var(--on-teal);border:0;border-radius:8px;padding:12px 20px;font:600 15px "IBM Plex Sans",sans-serif;text-decoration:none;cursor:pointer}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.btn:focus-visible,input:focus-visible,button:focus-visible{outline:3px solid var(--amber);outline-offset:2px}
+.hero{display:grid;grid-template-columns:1.05fr .95fr;gap:40px;align-items:center;padding:36px 0 64px}
+.hero h1{font-size:clamp(34px,5.2vw,58px);font-weight:800;letter-spacing:-.02em}
+.hero p{color:var(--muted);max-width:46ch;margin:18px 0 26px}
+.cta{display:flex;gap:12px;flex-wrap:wrap}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:22px}
+.wallet{font-size:13px;color:var(--muted);display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-bottom:6px}
+.wallet code{font-family:ui-monospace,Menlo,monospace;color:var(--ink)}
+.gauge{width:100%;max-width:320px;display:block;margin:6px auto 0}
+.gauge .track{fill:none;stroke:var(--line);stroke-width:16;stroke-linecap:round}
+.gauge .fill{fill:none;stroke:var(--teal);stroke-width:16;stroke-linecap:round;stroke-dasharray:251;stroke-dashoffset:251;animation:fill 1.6s .3s ease-out forwards}
+.gauge .fill.bw{stroke:var(--amber);animation-delay:.6s}
+@keyframes fill{to{stroke-dashoffset:var(--off)}}
+.gauge text{fill:var(--ink);font:800 28px "Bricolage Grotesque",sans-serif;text-anchor:middle}
+.gauge text.s{font:500 12px "IBM Plex Sans",sans-serif;fill:var(--muted)}
+.rows{margin-top:10px;border-top:1px solid var(--line)}
+.row{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--line);font-size:14px}
+.row span:last-child{font-weight:600}
+.tag{font-size:12px;color:var(--muted);text-align:center;margin-top:10px}
+section{padding:48px 0;border-top:1px solid var(--line)}
+section h2{font-size:clamp(26px,3.6vw,38px);margin-bottom:10px}
+.lead{color:var(--muted);max-width:58ch;margin:0 0 26px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.grid h3{font-size:19px;margin-bottom:6px}
+.grid p{margin:0;color:var(--muted);font-size:15px}
+.ref{display:grid;grid-template-columns:1fr 1fr;gap:28px;align-items:start}
+.chain{display:grid;gap:10px}
+.chain div{display:flex;justify-content:space-between;gap:10px;padding:12px 14px;border:1px solid var(--line);border-radius:10px;background:var(--surface);font-size:15px}
+.chain .win{background:var(--teal-soft);border-color:var(--teal)}
+.chain .none{color:var(--muted);border-style:dashed}
+.auth{max-width:440px;margin:0 auto}
+.tabs{display:flex;gap:6px;margin-bottom:16px}
+.tabs button{flex:1;padding:10px;border:1px solid var(--line);background:transparent;color:var(--ink);border-radius:8px;font:600 14px "IBM Plex Sans",sans-serif;cursor:pointer}
+.tabs button[aria-selected="true"]{background:var(--teal);color:var(--on-teal);border-color:var(--teal)}
+label{display:block;font-size:14px;font-weight:500;margin:12px 0 4px}
+input{width:100%;padding:12px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font:400 16px "IBM Plex Sans",sans-serif}
+.auth .btn{width:100%;margin-top:16px}
+.google{display:flex;align-items:center;justify-content:center;gap:10px}
+.or{text-align:center;color:var(--muted);font-size:13px;margin:14px 0 0}
+.msg{margin-top:14px;padding:12px;border-radius:8px;background:var(--teal-soft);font-size:14px}
+.err{color:#b3261e;font-size:13px;margin-top:6px;min-height:18px}
+footer{padding:32px 0 48px;color:var(--muted);font-size:13px;border-top:1px solid var(--line)}
+@media (max-width:760px){.hero,.ref,.grid{grid-template-columns:1fr}.hero{padding-top:12px}}
+@media (prefers-reduced-motion:reduce){.gauge .fill{animation:none;stroke-dashoffset:var(--off)}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav><a class="logo" href="#top">Chain<b>View</b></a><a class="btn ghost" href="#join">Sign up</a></nav>
+
+<header class="hero" id="top">
+<div>
+<h1>See your Tron wallet’s energy, bandwidth and transfers in one place.</h1>
+<p>Paste a wallet address and ChainView shows what is in it, what it can still send for free, and where each transfer went. It only reads public blockchain data. It never holds your money.</p>
+<div class="cta"><a class="btn" href="#join">Create free account</a><a class="btn ghost" href="#how">How it works</a></div>
+</div>
+<div class="card" aria-label="Sample wallet preview">
+<div class="wallet"><span>Sample wallet</span><code>TXyz…9aQ4</code></div>
+<svg class="gauge" viewBox="0 0 200 118" role="img" aria-label="Energy 72 percent, bandwidth 41 percent">
+<path class="track" d="M20 100 A80 80 0 0 1 180 100"/>
+<path class="fill" style="--off:70" d="M20 100 A80 80 0 0 1 180 100"/>
+<path class="track" d="M44 100 A56 56 0 0 1 156 100" style="stroke-width:10"/>
+<path class="fill bw" style="--off:148;stroke-width:10;stroke-dasharray:176;stroke-dashoffset:176" d="M44 100 A56 56 0 0 1 156 100"/>
+<text x="100" y="92">72%</text><text class="s" x="100" y="110">energy left</text>
+</svg>
+<div class="rows">
+<div class="row"><span>USDT balance</span><span>250.00</span></div>
+<div class="row"><span>TRX balance</span><span>1,240</span></div>
+<div class="row"><span>Bandwidth left</span><span>41%</span></div>
+<div class="row"><span>Last transfer</span><span>12 min ago</span></div>
+</div>
+<p class="tag">Sample data for demo only</p>
+</div>
+</header>
+
+<section id="how">
+<h2>What you can do</h2>
+<p class="lead">Everything here is read-only. Your funds stay in your own wallet.</p>
+<div class="grid">
+<div class="card"><h3>Track a wallet</h3><p>Add any Tron address and see balances and every transfer in and out.</p></div>
+<div class="card"><h3>Check energy</h3><p>See how much energy and bandwidth is left, so you know when a transfer will cost TRX.</p></div>
+<div class="card"><h3>Watch prices</h3><p>Follow TRX and USDT prices and your wallet’s total value over time.</p></div>
+</div>
+</section>
+
+<section id="refer">
+<h2>Invite a friend, get a reward</h2>
+<p class="lead">One level only. You are rewarded when a friend you invited buys something, and nobody else in the chain earns from it.</p>
+<div class="ref">
+<div class="card"><h3 style="font-size:20px;margin-bottom:8px">Example</h3><p style="margin:0;color:var(--muted)">Amit joins with Ravi’s link and buys a ₹500 energy pack. Ravi gets 10%, which is ₹50, paid from the sale after Amit’s payment is confirmed.</p></div>
+<div class="chain">
+<div class="none"><span>Person who invited Ravi</span><span>₹0</span></div>
+<div class="win"><span>Ravi (invited Amit)</span><span>₹50</span></div>
+<div><span>Amit (bought the pack)</span><span>₹500</span></div>
+</div>
+</div>
+</section>
+
+<section id="join">
+<h2 style="text-align:center">Create your account</h2>
+<p class="lead" style="text-align:center;margin-inline:auto">This is a design sample, so no account is created.</p>
+<div class="card auth">
+<div class="tabs" role="tablist">
+<button role="tab" id="t-up" aria-selected="true">Sign up</button>
+<button role="tab" id="t-in" aria-selected="false">Log in</button>
+</div>
+<button class="btn ghost google" id="g" type="button"><svg width="18" height="18" viewBox="0 0 48 48" aria-hidden="true"><path fill="#4285F4" d="M45 24.5c0-1.6-.1-3.1-.4-4.5H24v8.5h11.8c-.5 2.7-2.1 5-4.4 6.5v5.4h7.1c4.2-3.8 6.5-9.5 6.5-15.9z"/><path fill="#34A853" d="M24 46c5.9 0 10.9-2 14.5-5.3l-7.1-5.4c-2 1.3-4.5 2.1-7.4 2.1-5.7 0-10.5-3.8-12.2-9H4.5v5.6C8.1 41.1 15.5 46 24 46z"/><path fill="#FBBC05" d="M11.8 28.4c-.4-1.3-.7-2.7-.7-4.4s.3-3 .7-4.4v-5.6H4.5C3 17 2 20.400 2 24s1 7 2.500 10l7.300-5.600z"/><path fill="#EA4335" d="M24 10.600c3.200 0 6.100 1.100 8.400 3.300l6.300-6.300C34.900 4.100 29.900 2 24 2 15.500 2 8.100 6.900 4.500 14l7.300 5.600c1.700-5.200 6.500-9 12.200-9z"/></svg>Continue with Google</button>
+<p class="or">or use your email</p>
+<form id="f" novalidate>
+<label for="em">Email</label><input id="em" type="email" autocomplete="email" placeholder="you@example.com">
+<label for="pw">Password</label><input id="pw" type="password" autocomplete="new-password" placeholder="At least 8 characters">
+<p class="err" id="err" role="alert"></p>
+<button class="btn" id="go" type="submit">Create account</button>
+</form>
+<div class="msg" id="ok" hidden></div>
+</div>
+</section>
+
+<footer>ChainView is a design sample. All numbers are made up. It shows public blockchain data only, holds no funds and makes no promise of returns.</footer>
+</div>
+<script>
+(function(){
+var up=document.getElementById("t-up"),inn=document.getElementById("t-in"),go=document.getElementById("go"),
+f=document.getElementById("f"),err=document.getElementById("err"),ok=document.getElementById("ok"),mode="up";
+function set(m){mode=m;up.setAttribute("aria-selected",m==="up");inn.setAttribute("aria-selected",m==="in");
+go.textContent=m==="up"?"Create account":"Log in";err.textContent="";ok.hidden=true}
+up.onclick=function(){set("up")};inn.onclick=function(){set("in")};
+document.getElementById("g").onclick=function(){ok.hidden=false;ok.textContent="Demo only: Google sign-in will connect here in the real build."};
+f.onsubmit=function(e){e.preventDefault();ok.hidden=true;
+var em=document.getElementById("em").value.trim(),pw=document.getElementById("pw").value;
+if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(em)){err.textContent="Enter a valid email address.";return}
+if(pw.length<8){err.textContent="Password must be at least 8 characters.";return}
+err.textContent="";ok.hidden=false;
+ok.textContent=mode==="up"?"Demo only: account created for "+em+". Next step builds the dashboard.":"Demo only: logged in as "+em+".";};
+})();
+</script>
+</body>
+</html>

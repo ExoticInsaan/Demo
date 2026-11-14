@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ChainView – Admin and public page (sample)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700;800&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#edf1f4;--surface:#fff;--ink:#12202e;--muted:#52636f;--line:#c9d3db;--teal:#0f5c63;--teal-soft:#d7ebec;--amber:#e8a33d;--on-teal:#fff;--in:#17794a;--out:#b3261e;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1a24;--surface:#16252f;--ink:#e8eef2;--muted:#9bb0bd;--line:#2b3e4a;--teal:#5cc4cc;--teal-soft:#183840;--amber:#f0b45a;--on-teal:#0f1a24;--in:#5fd39a;--out:#ff8a80}}
+:root[data-theme="dark"]{--bg:#0f1a24;--surface:#16252f;--ink:#e8eef2;--muted:#9bb0bd;--line:#2b3e4a;--teal:#5cc4cc;--teal-soft:#183840;--amber:#f0b45a;--on-teal:#0f1a24;--in:#5fd39a;--out:#ff8a80}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 15px/1.55 "IBM Plex Sans",system-ui,sans-serif}
+h1,h2,h3{font-family:"Bricolage Grotesque","IBM Plex Sans",sans-serif;margin:0;line-height:1.1}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+.top{display:flex;justify-content:space-between;align-items:center;padding:16px 0;gap:12px;flex-wrap:wrap}
+.logo{font:800 22px "Bricolage Grotesque",sans-serif}.logo b{color:var(--teal)}
+.nav{display:flex;gap:6px}
+.nav a{text-decoration:none;border:1px solid var(--line);border-radius:8px;padding:8px 14px;font-weight:600;font-size:14px}
+.nav a[aria-current="page"]{background:var(--teal);color:var(--on-teal);border-color:var(--teal)}
+a:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid var(--amber);outline-offset:2px}
+button{font:inherit;cursor:pointer}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:20px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:16px 0}
+.stat small{color:var(--muted);display:block}
+.stat strong{font:800 28px "Bricolage Grotesque",sans-serif;display:block}
+.head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap}
+.head h2{font-size:20px}
+.cols{display:grid;grid-template-columns:1.5fr 1fr;gap:16px;margin-bottom:16px}
+input{padding:10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font:400 15px "IBM Plex Sans",sans-serif;min-width:200px}
+.tablewrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;min-width:560px}
+th,td{text-align:left;padding:10px 8px;border-bottom:1px solid var(--line);font-size:14px}
+th{color:var(--muted);font-weight:500}
+.badge{font-size:12px;padding:2px 9px;border-radius:99px;border:1px solid var(--line)}
+.badge.act{color:var(--in);border-color:var(--in)}.badge.sus{color:var(--out);border-color:var(--out)}
+.mini{border:1px solid var(--line);background:transparent;color:var(--ink);border-radius:8px;padding:5px 10px;font-size:13px}
+.log{list-style:none;margin:0;padding:0;max-height:340px;overflow:auto}
+.log li{padding:9px 0;border-bottom:1px solid var(--line);font-size:14px;display:flex;justify-content:space-between;gap:10px}
+.log time{color:var(--muted);white-space:nowrap;font-size:13px}
+.empty{padding:16px;text-align:center;color:var(--muted)}
+.pill{display:inline-block;background:var(--teal-soft);border-radius:99px;padding:3px 12px;font-size:13px;font-weight:600;margin-bottom:10px}
+.hero h1{font-size:clamp(30px,5vw,48px);font-weight:800;letter-spacing:-.02em;max-width:18ch}
+.hero p{color:var(--muted);max-width:56ch;margin:14px 0 0}
+code{font-family:ui-monospace,Menlo,monospace;font-size:13px;word-break:break-all}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+.no li{margin:6px 0}
+.up{color:var(--in)}.dn{color:var(--out)}
+footer{padding:24px 0 40px;color:var(--muted);font-size:13px}
+[hidden]{display:none!important}
+@media (max-width:820px){.stats{grid-template-columns:repeat(2,1fr)}.cols,.two{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="top">
+<div class="logo">Chain<b>View</b></div>
+<nav class="nav" aria-label="Sample views"><a href="#admin" id="na">Admin panel</a><a href="#public" id="np">Public page</a></nav>
+</div>
+
+<main id="v-admin">
+<span class="pill">Admin view, sample</span>
+<h1 style="font-size:30px">Overview</h1>
+<div class="stats">
+<div class="card stat"><small>Total users</small><strong id="s1">-</strong></div>
+<div class="card stat"><small>Active users</small><strong id="s2">-</strong></div>
+<div class="card stat"><small>Wallets tracked</small><strong>128</strong></div>
+<div class="card stat"><small>Energy packs sold (30 days)</small><strong>342</strong></div>
+</div>
+<div class="cols">
+<div class="card">
+<div class="head"><h2>Users</h2><input id="q" type="search" placeholder="Search by name or email" aria-label="Search users"></div>
+<div class="tablewrap"><table><thead><tr><th>Name</th><th>Email</th><th>Last login</th><th>Wallets</th><th>Status</th><th></th></tr></thead><tbody id="ut"></tbody></table></div>
+<div class="empty" id="ue" hidden>No users match your search.</div>
+</div>
+<div class="card">
+<div class="head"><h2>Activity log</h2></div>
+<ul class="log" id="lg"></ul>
+</div>
+</div>
+<footer>Sample data. In the real build every admin action is written to a permanent audit log, and only approved admins can sign in.</footer>
+</main>
+
+<main id="v-public" hidden>
+<div class="hero" style="padding:20px 0 28px">
+<span class="pill">Public page, read only</span>
+<h1>What ChainView does, in the open.</h1>
+<p>Anyone can read this page without an account. It shows service-wide totals and the service’s own public wallet. It never shows private user data.</p>
+</div>
+<div class="stats">
+<div class="card stat"><small>Users</small><strong>1,284</strong></div>
+<div class="card stat"><small>Wallets tracked</small><strong>3,906</strong></div>
+<div class="card stat"><small>Energy packs sold</small><strong>9,412</strong></div>
+<div class="card stat"><small>Uptime (90 days)</small><strong>99.9%</strong></div>
+</div>
+<div class="two">
+<div class="card">
+<div class="head"><h2>Service wallet</h2></div>
+<p style="margin:0 0 8px;color:var(--muted)">The wallet that receives payments for energy packs. Check it yourself on a Tron block explorer.</p>
+<code>TSvc8hGfD3sAq6wEr9tYu2iOp5lKj7Zx1</code>
+<p style="margin:12px 0 0;color:var(--muted);font-size:13px">Sample address for this demo.</p>
+</div>
+<div class="card">
+<div class="head"><h2>What this page never shows</h2></div>
+<ul class="no" style="margin:0;padding-left:18px;color:var(--muted)">
+<li>User emails or passwords</li>
+<li>Which user owns which wallet</li>
+<li>Private keys. ChainView never asks for them.</li>
+</ul>
+</div>
+</div>
+<div class="card" style="margin-bottom:16px">
+<div class="head"><h2>Recent payments to the service wallet</h2></div>
+<div class="tablewrap"><table><thead><tr><th>When</th><th>From</th><th>Amount</th><th>Item</th></tr></thead><tbody>
+<tr><td>5 min ago</td><td><code>TLm9…c2Xa</code></td><td class="up">+25 USDT</td><td>Energy pack, small</td></tr>
+<tr><td>18 min ago</td><td><code>TQp4…8Wde</code></td><td class="up">+60 USDT</td><td>Energy pack, medium</td></tr>
+<tr><td>1 hour ago</td><td><code>TBr7…1Kfh</code></td><td class="up">+25 USDT</td><td>Energy pack, small</td></tr>
+<tr><td>3 hours ago</td><td><code>TNa2…6Yuo</code></td><td class="up">+110 USDT</td><td>Energy pack, large</td></tr>
+</tbody></table></div>
+</div>
+<footer>Sample page with made-up data. ChainView does not take deposits, does not hold user funds and does not promise returns.</footer>
+</main>
+</div>
+<script>
+(function(){
+function $(i){return document.getElementById(i)}
+var U=[
+["Amit Sharma","amit@example.com","Today, 10:42",3,1],["Ravi Verma","ravi@example.com","Today, 09:15",2,1],
+["Sunil Meena","sunil@example.com","Yesterday",1,1],["Priya Jain","priya@example.com","2 days ago",4,1],
+["Karan Singh","karan@example.com","5 days ago",1,0],["Neha Gupta","neha@example.com","Today, 08:03",2,1],
+["Rohit Saini","rohit@example.com","Yesterday",0,1],["Vikram Yadav","vikram@example.com","12 days ago",1,1]];
+var L=[["10:42","Amit Sharma logged in"],["10:31","Amit Sharma added a wallet"],["09:15","Ravi Verma logged in"],["08:03","Neha Gupta logged in"],["Yesterday","Sunil Meena bought a small energy pack"]];
+function stats(){$("s1").textContent=U.length;$("s2").textContent=U.filter(function(u){return u[4]}).length}
+function users(){
+var q=$("q").value.trim().toLowerCase(),tb=$("ut");tb.innerHTML="";
+var list=U.filter(function(u){return !q||u[0].toLowerCase().indexOf(q)>-1||u[1].toLowerCase().indexOf(q)>-1});
+$("ue").hidden=list.length>0;
+list.forEach(function(u){var tr=document.createElement("tr");
+tr.innerHTML="<td></td><td></td><td></td><td></td><td><span class='badge'></span></td><td><button class='mini' type='button'></button></td>";
+var c=tr.children;c[0].textContent=u[0];c[1].textContent=u[1];c[2].textContent=u[2];c[3].textContent=u[3];
+var b=c[4].firstChild;b.textContent=u[4]?"Active":"Suspended";b.className="badge "+(u[4]?"act":"sus");
+var btn=c[5].firstChild;btn.textContent=u[4]?"Suspend":"Reactivate";
+btn.onclick=function(){u[4]=u[4]?0:1;L.unshift(["Just now","Admin "+(u[4]?"reactivated ":"suspended ")+u[0]]);stats();users();log()};
+tb.appendChild(tr)})}
+function log(){var ul=$("lg");ul.innerHTML="";L.forEach(function(e){var li=document.createElement("li");li.innerHTML="<span></span><time></time>";li.children[0].textContent=e[1];li.children[1].textContent=e[0];ul.appendChild(li)})}
+$("q").oninput=users;
+function route(){var pub=location.hash==="#public";
+$("v-admin").hidden=pub;$("v-public").hidden=!pub;
+$("na").setAttribute("aria-current",pub?"false":"page");$("np").setAttribute("aria-current",pub?"page":"false")}
+window.addEventListener("hashchange",route);
+stats();users();log();route();
+})();
+</script>
+</body>
+</html>
