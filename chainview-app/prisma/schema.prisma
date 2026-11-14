@@ -1,6 +1,9 @@
-generator client { provider = "prisma-client-js" }
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
+}
 datasource db {
-  provider = "sqlite" // switch to "postgresql" for production (e.g. Supabase)
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 model User {
