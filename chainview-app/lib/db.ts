@@ -1,5 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
+import { Pool } from "pg";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 
 // On Cloudflare Workers a database connection cannot be shared between requests,
@@ -11,7 +12,7 @@ function makeClient() {
     const hd = (getCloudflareContext().env as any)?.HYPERDRIVE;
     if (hd?.connectionString) connectionString = hd.connectionString;
   } catch {}
-  const adapter = new PrismaPg({ connectionString });
+  const adapter = new PrismaPg(new Pool({ connectionString, max: 1 }));
   return new PrismaClient({ adapter });
 }
 

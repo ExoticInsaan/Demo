@@ -20,7 +20,7 @@ export async function getWalletInfo(address: string) {
     usdt: Number(usdtRaw) / 1e6,
     energyLeft: pct(res.EnergyLimit, res.EnergyUsed),
     bandwidthLeft: pct((res.freeNetLimit ?? 0) + (res.NetLimit ?? 0), (res.freeNetUsed ?? 0) + (res.NetUsed ?? 0)),
-    transfers: (tx?.data ?? []).map((t: any) => ({
+    transfers: ((tx?.data ?? []) as any[]).map((t: any) => ({
       id: t.transaction_id as string,
       dir: t.to === address ? "in" : "out",
       amount: Number(t.value) / 10 ** Number(t.token_info?.decimals ?? 6),
