@@ -1,0 +1,31 @@
+:root{--bg:#edf1f4;--surface:#fff;--ink:#12202e;--muted:#52636f;--line:#c9d3db;--teal:#0f5c63;--soft:#d7ebec;--amber:#e8a33d;--on:#fff;--ok:#17794a;--bad:#b3261e}
+@media (prefers-color-scheme:dark){:root{--bg:#0f1a24;--surface:#16252f;--ink:#e8eef2;--muted:#9bb0bd;--line:#2b3e4a;--teal:#5cc4cc;--soft:#183840;--on:#0f1a24;--ok:#5fd39a;--bad:#ff8a80}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif}
+.wrap{max-width:1000px;margin:0 auto;padding:16px 20px 48px}
+h1,h2,h3{margin:0;line-height:1.15}
+.top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding:8px 0 16px}
+.logo{font-size:22px;font-weight:800}.logo b{color:var(--teal)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px;margin-bottom:14px}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+button,.btn{font:inherit;cursor:pointer;border-radius:8px;padding:9px 14px;border:1px solid var(--line);background:transparent;color:var(--ink);font-weight:600}
+button.primary{background:var(--teal);color:var(--on);border-color:var(--teal)}
+button.on{background:var(--soft);border-color:var(--teal)}
+button.small{padding:4px 10px;font-size:13px}
+button:disabled{opacity:.5;cursor:not-allowed}
+input,select{width:100%;padding:10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font:inherit}
+label{display:block;font-size:14px;font-weight:600;margin:10px 0 4px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.muted{color:var(--muted);font-size:14px}
+.err{color:var(--bad);font-size:14px;margin:8px 0}.okm{color:var(--ok);font-size:14px;margin:8px 0}
+code{font-family:ui-monospace,Menlo,monospace;font-size:13px;word-break:break-all}
+.scroll{overflow-x:auto}
+table{width:100%;border-collapse:collapse;min-width:560px}
+th,td{text-align:left;padding:8px 6px;border-bottom:1px solid var(--line);font-size:14px;vertical-align:top}
+th{color:var(--muted);font-weight:500}
+.badge{font-size:12px;padding:2px 9px;border-radius:99px;border:1px solid var(--line);white-space:nowrap}
+.bar{height:8px;background:var(--line);border-radius:99px;overflow:hidden;margin-top:6px}.bar i{display:block;height:100%;background:var(--teal)}
+.notice{background:var(--soft);border-radius:10px;padding:10px 14px;font-size:14px;margin-bottom:14px}
+.auth{max-width:400px;margin:40px auto}
+.in{color:var(--ok)}.out{color:var(--bad)}
